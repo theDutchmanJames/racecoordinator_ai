@@ -391,10 +391,8 @@
           <app-inspector-shell
             [widget]="currentSelectedWidget"
             [schema]="getInspectorSchema(currentSelectedWidget)"
-            [displayName]="getWidgetDisplayName(currentSelectedWidget)"
-            [typeLabelKey]="
-              getWidgetTypeLabelKey(currentSelectedWidget.widgetType)
-            "
+            [displayName]="panelDisplayName(currentSelectedWidget)"
+            [typeLabelKey]="panelTypeLabelKey(currentSelectedWidget)"
             [widthLocked]="isWidgetWidthAutoCalculated(currentSelectedWidget)"
             [heightLocked]="isWidgetHeightAutoCalculated(currentSelectedWidget)"
             [canNavigate]="getLayoutWidgets().length > 1"
