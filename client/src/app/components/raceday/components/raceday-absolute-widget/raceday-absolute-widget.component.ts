@@ -48,6 +48,7 @@ import { CustomWidgetService } from "@app/services/custom-widget.service";
 import { LoggerService } from "@app/services/logger.service";
 import { TranslationService } from "@app/services/translation.service";
 import { resolveWidgetBorderStyles } from "@app/utils/widget-border.utils";
+import { shadowFor, withOpacity } from "@app/utils/widget-style.utils";
 
 @Component({
   standalone: true,
@@ -138,11 +139,20 @@ export class RacedayAbsoluteWidgetComponent
   }
 
   get effectiveBackgroundColor(): string | null {
-    return (
+    const color =
       this.widget()?.customSettings?.["backgroundColor"] ||
       this.widget()?.backgroundColor ||
-      null
+      null;
+    return withOpacity(
+      color,
+      this.widget()?.customSettings?.["backgroundOpacity"],
     );
+  }
+
+  /** The widget's shadow setting as CSS (none for the Countdown, which is see-through). */
+  get effectiveShadow(): string | null {
+    if (this.isCountdownWidget) return null;
+    return shadowFor(this.widget()?.customSettings?.["shadow"]);
   }
 
   get borderStyles() {
