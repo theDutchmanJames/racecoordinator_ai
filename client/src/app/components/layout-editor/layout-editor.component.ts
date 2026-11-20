@@ -104,6 +104,7 @@ import {
 import {
   handleDeleteCurrentLayout,
   handleDuplicateCurrentLayout,
+  getWidgetTypeLabelKey,
   handleStartNewLayout,
   loadLayoutZoomFromStorage,
   parseLayoutConfig,
@@ -422,17 +423,10 @@ export class LayoutEditorComponent
   }
 
   /**
-   * Header name for the redesigned panel. Custom widgets show their manifest
-   * name (the generic name is a translation key that doesn't exist for them).
+   * Header name for the redesigned panel: the editor's own display name,
+   * which also gives custom widgets their localized manifest name (#1202).
    */
   panelDisplayName(widget: any): string {
-    const type: string = widget?.widgetType || "";
-    if (type.startsWith("custom:")) {
-      return (
-        this.customWidgetService?.getWidgetDefinition(type)?.manifest?.name ||
-        type.replace(/^custom:/, "")
-      );
-    }
     return this.getWidgetDisplayName(widget);
   }
 
@@ -440,7 +434,7 @@ export class LayoutEditorComponent
     const type: string = widget?.widgetType || "";
     return type.startsWith("custom:")
       ? "UE_INSPECTOR_CUSTOM_WIDGET"
-      : this.getWidgetTypeLabelKey(type);
+      : getWidgetTypeLabelKey(type);
   }
 
   /** Position / size fields of the redesigned panel use the existing handlers. */
@@ -509,8 +503,10 @@ export class LayoutEditorComponent
     optional: true,
   });
   public customUiService = inject(CustomUiService, { optional: true });
-  /** Custom widget manifests, for the redesigned panel's custom widget fields. */
-  private customWidgetService = inject(CustomWidgetService, { optional: true });
+  /** Custom widget manifests: localized names (#1202) and the redesigned panel's custom widget fields. */
+  protected override customWidgetService = inject(CustomWidgetService, {
+    optional: true,
+  });
   public helpService = inject(HelpService, { optional: true });
 
   constructor(

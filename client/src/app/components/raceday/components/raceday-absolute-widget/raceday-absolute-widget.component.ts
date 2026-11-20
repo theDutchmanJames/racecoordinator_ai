@@ -53,6 +53,7 @@ import { TranslatePipe } from "@app/pipes/translate.pipe";
 import { CustomWidgetService } from "@app/services/custom-widget.service";
 import { LoggerService } from "@app/services/logger.service";
 import { TranslationService } from "@app/services/translation.service";
+import { resolveCustomWidgetName } from "@app/utils/custom-widget-name.utils";
 import { resolveWidgetBorderStyles } from "@app/utils/widget-border.utils";
 import { shadowFor, withOpacity } from "@app/utils/widget-style.utils";
 
@@ -1010,19 +1011,11 @@ export class RacedayAbsoluteWidgetComponent
   }
 
   getCustomWidgetName(type: string | undefined): string {
-    if (
-      this.customWidgetService &&
-      typeof this.customWidgetService.getWidgetDefinition === "function"
-    ) {
-      const def = this.customWidgetService.getWidgetDefinition(type);
-      if (def?.manifest?.name) {
-        return def.manifest.name;
-      }
-    }
-    if (type?.startsWith("custom:")) {
-      return type.substring("custom:".length);
-    }
-    return type || "";
+    return resolveCustomWidgetName(
+      type,
+      this.customWidgetService?.getWidgetDefinition?.(type)?.manifest,
+      this.translationService,
+    );
   }
 
   getCustomWidgetError(type: string | undefined): string | undefined {
