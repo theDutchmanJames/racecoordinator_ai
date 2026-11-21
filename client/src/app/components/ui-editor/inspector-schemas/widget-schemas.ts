@@ -4,7 +4,12 @@ import { BATCH2_SCHEMAS } from "./batch2-schemas";
 import { BATCH3_SCHEMAS } from "./batch3-schemas";
 import { LANE_COLUMN_SCHEMAS } from "./lane-column-schema";
 import { laneViewSchema } from "./lane-view-schema";
-import { frameFolder, layoutFolder, textPart } from "./common";
+import {
+  emptyStateFolder,
+  frameFolder,
+  layoutFolder,
+  textPart,
+} from "./common";
 
 /**
  * Widgets that use the redesigned panel. Every other widget keeps its
@@ -102,6 +107,7 @@ const recordsSchema: InspectorSchema = {
     },
     frameFolder(),
     layoutFolder(),
+    emptyStateFolder(),
   ],
 };
 
